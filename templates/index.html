@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	{% block head %}{% endblock %}
+</head>
+<body>
+    <div class="top-banner improved-banner">
+		<a class="library-button" href="/">Go to Library</a>
+        {% if 'user' in session %}
+            <a class="library-button" href="/logout">Log out of {{ session['user']['first_name'] }}</a>
+        {% else %}
+			<a class="library-button" href="/login">Login</a>
+        {% endif %}
+    </div>
+    <div class="content improved-content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

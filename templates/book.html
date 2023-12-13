@@ -1,0 +1,62 @@
+{% extends "index.html" %}
+
+{% block head %}
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .book-container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .back-button {
+            margin-bottom: 20px;
+            background-color: #f0f0f0;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    
+		.book-image {
+			margin-bottom: 20px;
+		}
+	</style>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ book.title }}</h1>
+    {% if book.image_location %}
+        <div class="book-image">
+			<img src="{{ url_for('static', filename='bookImages/' + book.image_location) }}" alt="{{ book.title }}" style="max-width: 250px; height: auto;">
+        </div>
+    {% endif %}
+    <p>{{ book.description }}</p>
+
+	{% if book.on_loan_until != 'Not On Loan' %}
+		<p>This book is currently loaned to {{ book.first_name }} ({{ book.email }}).</p>
+		<p>It is due back on {{ book.end }}.</p>
+	{% elif book.on_loan_until == 'Not On Loan' and 'user' in session %}
+		<p>This book is currently available for borrowing.</p>
+		<form action="/reserve/{{ book.bookid }}" method="post">
+			<button type="submit">Reserve this book a week until: {{ date_in_a_week }}</button>
+		</form>
+	{% else %}
+		<p>This book is currently available for borrowing.</p>
+		<p>You must be logged in to borrow this book.</p>
+		<a href="/login">Login</a>
+	{% endif %}
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,75 @@
+{% extends "index.html" %}
+
+{% block head %}
+		<!-- DataTables CSS -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css"
+		/>
+
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+		<!-- DataTables JS -->
+		<script
+			type="text/javascript"
+			charset="utf8"
+			src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"
+		></script>
+{% endblock %}
+
+{% block content %}
+<div class="button-container">
+	<form action="/" method="post">
+		<button type="submit" name="filter" value="loaned">On Loan</button>
+		<button type="submit" name="filter" value="returningToday">To Be Returned Today</button>
+		<button type="submit" name="filter" value="available">Available for Borrowing</button>
+		<button type="submit" name="filter" value="all">All Books</button>
+	</form>
+</div>
+
+
+
+<table id="myTable" class="display">
+	<thead>
+		<tr>
+			<th>Book Title</th>
+			<th>Description</th>
+			<th>On Loan Until</th>
+			<th>More Details</th>
+		</tr>
+	</thead>
+	<tbody>
+
+
+		{% for book in books %}
+		<tr>
+			<td><h3>{{ book.title }}</h2></td>
+			<td><p>{{ book.description }}</p></td>
+			<td>{{ book.on_loan_until }}</td>
+			<td>                
+			{% if book.on_loan_until == "Not On Loan" %}
+				<a href="/book/{{ book.bookid }}">Borrow</a>
+			{% else %}
+				<a href="/book/{{ book.bookid }}">See Details</a>
+			{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<!-- DataTables JS -->
+<script
+	type="text/javascript"
+	charset="utf8"
+	src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"
+></script>
+
+<script>
+	$(document).ready(function () {
+		$("#myTable").DataTable();
+	});
+</script>
+{% endblock %}
